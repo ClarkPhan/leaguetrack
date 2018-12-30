@@ -2,16 +2,26 @@
   "name": "leaguetrack",
   "version": "0.1.0",
   "private": true,
+  "devDependencies": {
+    "node-sass": "^4.11.0"
+  },
   "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "bulma": "^0.7.2",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-scripts": "2.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start & npm run css-watch",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "css-build": "node-sass --omit-source-map-url src/sass/styles.scss src/css/styles.css",
+    "css-watch": "npm run css-build -- --watch"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -21,5 +31,6 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "proxy": "http://localhost:3001"
 }
