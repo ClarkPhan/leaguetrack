@@ -6,8 +6,14 @@ const request = require('request');
 const app = express();
 const port = process.env.PORT || 3001;
 
-const API = 'https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/';
-const API_KEY = process.env.API_KEY;
+const API = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/';
+const RANK_API = 'https://na1.api.riotgames.com/lol/league/v4/positions/by-summoner/'
+const API_KEY = '?api_key=' + process.env.API_KEY;
+
+// helper function to print data in console
+printData = data => {
+  console.log(JSON.stringify(JSON.parse(data), null, 2));
+}
 
 // use static content generated from build
 app.use(express.static(path.join(__dirname, '../build')));
@@ -21,13 +27,34 @@ app.get('/ping', (req, res) => {
 });
 
 app.post('/search', (req, res) => {
-  console.log(req.body);
-  let query = API + req.body.user + '?api_key=' + API_KEY;
-  console.log(query);
+  let query = API + req.body.user + API_KEY;
+
   request(query, (err, response, body) => {
     if (!err && response.statusCode == 200) {
-      console.log(body)
-      res.send(body);
+      printData(body);
+      console.log('********************');
+      let profileIconId = JSON.parse(body).profileIconId;
+      let summonerId = JSON.parse(body).id;
+      let query = RANK_API + summonerId + API_KEY;
+      console.log(query);
+      request(query, (err, response, body) => {
+        if (!err && response.statusCode == 200) {
+          printData(body);
+          let data = JSON.parse(body);
+          let returnObj = {}
+          if (data[0].queueType === "RANKED_SOLO_5x5") {
+            returnObj = data[0];
+          } else if (data[0].queueType === "RANKED_FLEX_SR") {
+            returnObj = data[1];
+          }
+          returnObj.profileIconId = profileIconId;
+          res.send(returnObj);
+        } else {
+          res.send("bad request");
+        }
+      })
+    } else {
+      res.send("bad request");
     }
   })
 });
