@@ -5,3 +5,27 @@ img.resize {
     margin-left: auto;
     margin-right: auto;
 }
+
+img.medal-resize {
+    height: auto;
+    width: 30%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+img.profilePic-resize {
+    height: auto;
+    width: 15%;
+
+}
+
+#landingPage {
+    padding: 4rem 1.5rem;
+}
+
+#landingPageFooter {
+    background-color: #fafafa;
+    padding: 3rem 1.5rem 3rem;
+}
