@@ -15,6 +15,18 @@ printData = data => {
   console.log(JSON.stringify(JSON.parse(data), null, 2));
 }
 
+// helper function to convert roman numberals to integers
+romanToInt = num => {
+  let roman = ["I", "II", "III", "IV"];
+  let value = ["1", "2", "3", "4"];
+  for (let i = 0; i < roman.length; i++) {
+      if (roman[i] === num) {
+          return value[i].toString();
+      }
+  }
+  return "error";
+}
+
 // use static content generated from build
 app.use(express.static(path.join(__dirname, '../build')));
 
@@ -33,21 +45,22 @@ app.post('/search', (req, res) => {
     if (!err && response.statusCode == 200) {
       printData(body);
       console.log('********************');
-      let profileIconId = JSON.parse(body).profileIconId;
-      let summonerId = JSON.parse(body).id;
-      let query = RANK_API + summonerId + API_KEY;
+      let parsedData = JSON.parse(body);
+      let query = RANK_API + parsedData.id + API_KEY;
       console.log(query);
       request(query, (err, response, body) => {
         if (!err && response.statusCode == 200) {
           printData(body);
           let data = JSON.parse(body);
           let returnObj = {}
-          if (data[0].queueType === "RANKED_SOLO_5x5") {
-            returnObj = data[0];
-          } else if (data[0].queueType === "RANKED_FLEX_SR") {
-            returnObj = data[1];
-          }
-          returnObj.profileIconId = profileIconId;
+          data.forEach(queue => {
+            if (queue.queueType === "RANKED_SOLO_5x5") {
+              returnObj = queue;
+              returnObj.tierMedal = `http://opgg-static.akamaized.net/images/medals/${queue.tier.toLowerCase()}_${romanToInt(queue.rank)}.png`; 
+            }
+          })
+          returnObj.profileIcon = `http://opgg-static.akamaized.net/images/profile_icons/profileIcon${parsedData.profileIconId}.jpg`;
+          returnObj.summonerName = parsedData.name;
           res.send(returnObj);
         } else {
           res.send("bad request");

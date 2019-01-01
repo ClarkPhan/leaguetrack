@@ -15,10 +15,12 @@ class Searchbar extends Component {
             leaguePoints: 0,
             wins: 0,
             losses: 0,
-            profileIconId: 0
+            profileIcon: '',
+            tierMedal: ''
         },
         showModal: false,
         isLoading: false,
+        loadImages: false,
         error: null
     }
 
@@ -31,18 +33,23 @@ class Searchbar extends Component {
     handleSearch = e => {
         e.preventDefault();
         if (this.state.searchText !== '') {
-            this.setState({ isLoading: true });
-            this.setState({ showModal: true });
-            console.log("search");
+            this.setState({
+                isLoading: true,
+                showModal: true
+            });
             axios.post('/search', { user: this.state.searchText })
                 .then(response => {
                     console.log(response.data);
                     if (response.data !== "bad request") {
                         this.setState({
                             searchResults: response.data,
-                            isLoading: false
+                            isLoading: false,
+                            loadImages: true
                         })
                     } else {
+                        this.setState({
+                            showModal: false
+                        });
                         // show client bad request ui
                     }
                 })
@@ -65,19 +72,8 @@ class Searchbar extends Component {
         }
     }
 
-    romanToInt = num => {
-        let roman = ["I", "II", "III", "IV"];
-        let value = ["1", "2", "3", "4"];
-        for (let i = 0; i < roman.length; i++) {
-            if (roman[i] === num) {
-                return value[i].toString();
-            }
-        }
-        return "error";
-    }
-
     render() {
-        const { isLoading, showModal, error, searchResults } = this.state;
+        const { isLoading, loadImages, showModal, error, searchResults } = this.state;
 
         if (error) {
             return <p>{error.message}</p>;
@@ -107,7 +103,7 @@ class Searchbar extends Component {
                                             <div>
                                                 <div className="level">
                                                     <div className="level-item">
-                                                        <img className="profilePic-resize" src={`http://opgg-static.akamaized.net/images/profile_icons/profileIcon${searchResults.profileIconId}.jpg`} alt="profile icon" />
+                                                        <img className="profilePic-resize" src={loadImages ? searchResults.profileIcon : null} alt="profile icon" />
                                                         {searchResults.summonerName}
                                                     </div>
                                                 </div>
@@ -121,13 +117,28 @@ class Searchbar extends Component {
                                 {isLoading ? <div className="has-text-centered"><FontAwesomeIcon icon="spinner" pulse={true} size="6x" /></div>
                                     : (
                                         <div className="has-text-centered">
-                                            <p><strong>{searchResults.leagueName}</strong></p>
-                                            <figure className="image is-280x280"><img className="medal-resize" src={`http://opgg-static.akamaized.net/images/medals/${searchResults.tier.toLowerCase()}_${this.romanToInt(searchResults.rank)}.png`} alt="ranked logo" /></figure>
-                                            <p>Tier: {searchResults.tier + ' ' + searchResults.rank}</p>
-                                            <p>Queue: {searchResults.queueType === "RANKED_SOLO_5x5" ? "Solo/Duo" : "Flex"}</p>
-                                            <p>LP: {searchResults.leaguePoints}</p>
-                                            <p>Wins: {searchResults.wins}</p>
-                                            <p>Losses: {searchResults.losses}</p>
+                                            {searchResults.tier === undefined
+                                                ? (
+                                                    <div>
+                                                        <figure className="image is-280x280">
+                                                            <img className="medal-resize" alt="ranked logo" src={loadImages ? 'http://opgg-static.akamaized.net/images/medals/default.png' : null} />
+                                                        </figure>
+                                                    </div>
+                                                )
+                                                : (
+                                                    <div>
+                                                        <p><strong>{searchResults.leagueName}</strong></p>
+                                                        <figure className="image is-280x280"><img className="medal-resize" alt="ranked logo"
+                                                            src={loadImages ? searchResults.tierMedal : null} />
+                                                        </figure>
+                                                        <p>Tier: {searchResults.tier + ' ' + searchResults.rank}</p>
+                                                        <p>Queue: Solo/Duo</p>
+                                                        <p>LP: {searchResults.leaguePoints}</p>
+                                                        <p>Wins: {searchResults.wins}</p>
+                                                        <p>Losses: {searchResults.losses}</p>
+                                                    </div>
+                                                )
+                                            }
                                         </div>
                                     )
                                 }
