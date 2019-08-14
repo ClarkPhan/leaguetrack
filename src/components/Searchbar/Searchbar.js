@@ -85,7 +85,10 @@ class Searchbar extends Component {
                     <div className="level-item has-text-centered">
                         <div className="field has-addons" >
                             <div className="control"><input className="input" type="text" placeholder="Search for a user" onChange={this.handleChange} onKeyDown={this.handleKeyPress}></input></div>
-                            <div className="control"><button className="button" onClick={this.handleSearch}>Search</button></div>
+                            <div className="control">
+                                <button className="button" onClick={this.handleSearch}>Search</button>
+                                <button className="region-button"> NA</button>
+                            </div>
                         </div>
                     </div>
                 </nav>
