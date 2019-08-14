@@ -39,8 +39,7 @@ app.get('/ping', (req, res) => {
 });
 
 app.post('/search', (req, res) => {
-  let query = API + req.body.user + API_KEY;
-
+  let query = API + encodeURI(req.body.user) + API_KEY;
   request(query, (err, response, body) => {
     if (!err && response.statusCode == 200) {
       printData(body);
