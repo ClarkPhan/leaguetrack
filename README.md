@@ -1,5 +1,4 @@
-A tool used to track a user's statistics in League of Legends
-
+![Landing Page](https://user-images.githubusercontent.com/18160144/63056225-76463900-be9c-11e9-8739-066311174cfc.JPG)
 Setup:
 1. `npm install` in root directory
 2. `npm start` in root directory
