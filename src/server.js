@@ -7,7 +7,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 const API = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/';
-const RANK_API = 'https://na1.api.riotgames.com/lol/league/v4/positions/by-summoner/'
+const RANK_API = 'https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/'
 const API_KEY = '?api_key=' + process.env.API_KEY;
 
 // helper function to print data in console
@@ -20,9 +20,9 @@ romanToInt = num => {
   let roman = ["I", "II", "III", "IV"];
   let value = ["1", "2", "3", "4"];
   for (let i = 0; i < roman.length; i++) {
-      if (roman[i] === num) {
-          return value[i].toString();
-      }
+    if (roman[i] === num) {
+      return value[i].toString();
+    }
   }
   return "error";
 }
@@ -56,7 +56,7 @@ app.post('/search', (req, res) => {
           data.forEach(queue => {
             if (queue.queueType === "RANKED_SOLO_5x5") {
               returnObj = queue;
-              returnObj.tierMedal = `http://opgg-static.akamaized.net/images/medals/${queue.tier.toLowerCase()}_${romanToInt(queue.rank)}.png`; 
+              returnObj.tierMedal = `http://opgg-static.akamaized.net/images/medals/${queue.tier.toLowerCase()}_${romanToInt(queue.rank)}.png`;
             }
           })
           returnObj.profileIcon = `http://opgg-static.akamaized.net/images/profile_icons/profileIcon${parsedData.profileIconId}.jpg`;
