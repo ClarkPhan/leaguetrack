@@ -1,4 +1,4 @@
-Setup:
+# Setup:
 1. `npm install` in root directory
 2. `npm start` in root directory
 3. `nodemon server.js` (using another terminal) in src directory
