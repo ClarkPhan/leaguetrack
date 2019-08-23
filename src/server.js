@@ -1,39 +1,44 @@
-require('dotenv').config()
-const express = require('express');
-const bodyParser = require('body-parser')
-const path = require('path');
-const request = require('request');
+// Node Packages
+import express from 'express';
+import { json } from 'body-parser';
+import { join } from 'path';
+import request from 'request';
+
+require('dotenv').config();
+
+// Express
 const app = express();
 const port = process.env.PORT || 3001;
 
+// API
 const API = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/';
-const RANK_API = 'https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/'
-const API_KEY = '?api_key=' + process.env.API_KEY;
+const RANK_API = 'https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/';
+const API_KEY = `?api_key=${process.env.API_KEY}`;
 
-// helper function to print data in console
-printData = data => {
+// Helper function to print data in console
+const printData = (data) => {
   console.log(JSON.stringify(JSON.parse(data), null, 2));
-}
+};
 
-// helper function to convert roman numberals to integers
-romanToInt = num => {
-  let roman = ["I", "II", "III", "IV"];
-  let value = ["1", "2", "3", "4"];
-  for (let i = 0; i < roman.length; i++) {
+// Helper function to convert roman numerals into integers
+const romanToInt = (num) => {
+  const roman = ['I', 'II', 'III', 'IV'];
+  const value = ['1', '2', '3', '4'];
+  for (let i = 0; i < roman.length; i += 1) {
     if (roman[i] === num) {
       return value[i].toString();
     }
   }
-  return "error";
-}
+  return 'error';
+};
 
-// use static content generated from build
-app.use(express.static(path.join(__dirname, '../build')));
+// Use static content generated from build
+app.use(express.static(join(__dirname, '../build')));
 
-// parse application/json
-app.use(bodyParser.json())
+// Parse application/json
+app.use(json());
 
-// test GET request
+// Test GET request
 app.get('/ping', (req, res) => {
   res.send('pong');
 });
@@ -41,38 +46,36 @@ app.get('/ping', (req, res) => {
 app.post('/search', (req, res) => {
   let query = API + encodeURI(req.body.user) + API_KEY;
   request(query, (err, response, body) => {
-    if (!err && response.statusCode == 200) {
+    if (!err && response.statusCode === 200) {
       printData(body);
-      console.log('********************');
-      let parsedData = JSON.parse(body);
-      let query = RANK_API + parsedData.id + API_KEY;
-      console.log(query);
+      const parsedData = JSON.parse(body);
+      query = RANK_API + parsedData.id + API_KEY;
       request(query, (err, response, body) => {
-        if (!err && response.statusCode == 200) {
+        if (!err && response.statusCode === 200) {
           printData(body);
-          let data = JSON.parse(body);
-          let returnObj = {}
-          data.forEach(queue => {
+          const data = JSON.parse(body);
+          let returnObj = {};
+          data.forEach((queue) => {
             if (queue.queueType === "RANKED_SOLO_5x5") {
               returnObj = queue;
               returnObj.tierMedal = `http://opgg-static.akamaized.net/images/medals/${queue.tier.toLowerCase()}_${romanToInt(queue.rank)}.png`;
             }
-          })
+          });
           returnObj.profileIcon = `http://opgg-static.akamaized.net/images/profile_icons/profileIcon${parsedData.profileIconId}.jpg`;
           returnObj.summonerName = parsedData.name;
           res.send(returnObj);
         } else {
-          res.send("bad request");
+          res.send('Invalid Summoner!');
         }
-      })
+      });
     } else {
-      res.send("bad request");
+      res.send('Invalid Summoner!');
     }
-  })
+  });
 });
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, '../build', 'index.html'));
+app.get('/', (req, res) => {
+  res.sendFile(join(__dirname, '../build', 'index.html'));
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
