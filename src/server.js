@@ -2,7 +2,7 @@
 import express from 'express';
 import { json } from 'body-parser';
 import { join } from 'path';
-import request from 'request';
+import axios from 'axios';
 import { printData, romanToInt } from './utils';
 
 // Load API Key
@@ -29,34 +29,36 @@ app.get('/ping', (req, res) => {
 });
 
 app.post('/search', (req, res) => {
+  console.log(req.body);
   let query = API + encodeURI(req.body.user) + API_KEY;
-  request(query, (err, response, body) => {
-    if (!err && response.statusCode === 200) {
-      printData(body);
-      const parsedData = JSON.parse(body);
-      query = RANK_API + parsedData.id + API_KEY;
-      request(query, (err, response, body) => {
-        if (!err && response.statusCode === 200) {
-          printData(body);
-          const data = JSON.parse(body);
-          let returnObj = {};
-          data.forEach((queue) => {
-            if (queue.queueType === 'RANKED_SOLO_5x5') {
-              returnObj = queue;
-              returnObj.tierMedal = `http://opgg-static.akamaized.net/images/medals/${queue.tier.toLowerCase()}_${romanToInt(queue.rank)}.png`;
-            }
-          });
-          returnObj.profileIcon = `http://opgg-static.akamaized.net/images/profile_icons/profileIcon${parsedData.profileIconId}.jpg`;
-          returnObj.summonerName = parsedData.name;
-          res.send(returnObj);
-        } else {
-          res.send('Invalid Summoner!');
+  let profileIconId = null;
+  let summonerName = null;
+  axios.get(query)
+    .then((response) => {
+      const { data } = response;
+      query = RANK_API + data.id + API_KEY;
+      summonerName = data.name;
+      profileIconId = data.profileIconId;
+      printData(data);
+      return axios.get(query);
+    })
+    .then((response) => {
+      const { data } = response;
+      printData(data);
+      let returnObj = {};
+      data.forEach((queue) => {
+        if (queue.queueType === 'RANKED_SOLO_5x5') {
+          returnObj = queue;
+          returnObj.tierMedal = `http://opgg-static.akamaized.net/images/medals/${queue.tier.toLowerCase()}_${romanToInt(queue.rank)}.png`;
         }
       });
-    } else {
+      returnObj.profileIcon = `http://opgg-static.akamaized.net/images/profile_icons/profileIcon${profileIconId}.jpg`;
+      returnObj.summonerName = summonerName;
+      res.send(returnObj);
+    })
+    .catch(() => {
       res.send('Invalid Summoner!');
-    }
-  });
+    });
 });
 
 app.get('/', (req, res) => {
