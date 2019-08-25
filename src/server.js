@@ -3,7 +3,7 @@ import express from 'express';
 import { json } from 'body-parser';
 import { join } from 'path';
 import axios from 'axios';
-import { printData, romanToInt } from './utils';
+import { romanToInt } from './utils';
 
 // Load API Key
 require('dotenv').config();
@@ -35,7 +35,6 @@ app.post('/search', (req, res) => {
   axios.get(query)
     .then((response) => {
       const { data } = response;
-      printData(data);
       query = RANK_API + data.id + API_KEY;
       summonerName = data.name;
       profileIconId = data.profileIconId;
@@ -43,7 +42,6 @@ app.post('/search', (req, res) => {
     })
     .then((response) => {
       const { data } = response;
-      printData(data);
       let returnObj = {};
       data.forEach((queue) => {
         if (queue.queueType === 'RANKED_SOLO_5x5') {
