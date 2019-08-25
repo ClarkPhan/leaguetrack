@@ -3,4 +3,4 @@ Setup:
 2. `npm run client` in root directory to run front-end server
 3. `npm run server` (using another terminal) in root directory to run back-end server
 
-![Landing Page](https://user-images.githubusercontent.com/18160144/63056225-76463900-be9c-11e9-8739-066311174cfc.JPG)
+![Landing Page](https://user-images.githubusercontent.com/18160144/63646461-0fa8f280-c6c8-11e9-8476-32fbcc8e7388.gif)
