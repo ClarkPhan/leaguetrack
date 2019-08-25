@@ -29,17 +29,16 @@ app.get('/ping', (req, res) => {
 });
 
 app.post('/search', (req, res) => {
-  console.log(req.body);
   let query = API + encodeURI(req.body.user) + API_KEY;
   let profileIconId = null;
   let summonerName = null;
   axios.get(query)
     .then((response) => {
       const { data } = response;
+      printData(data);
       query = RANK_API + data.id + API_KEY;
       summonerName = data.name;
       profileIconId = data.profileIconId;
-      printData(data);
       return axios.get(query);
     })
     .then((response) => {
