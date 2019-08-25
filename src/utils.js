@@ -1,5 +1,5 @@
 // Helper function to print data in console
-export const printData = (data) => console.log(JSON.stringify(JSON.parse(data), null, 2));
+export const printData = (data) => console.log(JSON.stringify(data, null, 2));
 
 // Helper function to convert roman numerals into integers
 export const romanToInt = (num) => {
