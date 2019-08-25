@@ -3,7 +3,9 @@ import express from 'express';
 import { json } from 'body-parser';
 import { join } from 'path';
 import request from 'request';
+import { printData, romanToInt } from './utils';
 
+// Load API Key
 require('dotenv').config();
 
 // Express
@@ -14,23 +16,6 @@ const port = process.env.PORT || 3001;
 const API = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/';
 const RANK_API = 'https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/';
 const API_KEY = `?api_key=${process.env.API_KEY}`;
-
-// Helper function to print data in console
-const printData = (data) => {
-  console.log(JSON.stringify(JSON.parse(data), null, 2));
-};
-
-// Helper function to convert roman numerals into integers
-const romanToInt = (num) => {
-  const roman = ['I', 'II', 'III', 'IV'];
-  const value = ['1', '2', '3', '4'];
-  for (let i = 0; i < roman.length; i += 1) {
-    if (roman[i] === num) {
-      return value[i].toString();
-    }
-  }
-  return 'error';
-};
 
 // Use static content generated from build
 app.use(express.static(join(__dirname, '../build')));
@@ -56,7 +41,7 @@ app.post('/search', (req, res) => {
           const data = JSON.parse(body);
           let returnObj = {};
           data.forEach((queue) => {
-            if (queue.queueType === "RANKED_SOLO_5x5") {
+            if (queue.queueType === 'RANKED_SOLO_5x5') {
               returnObj = queue;
               returnObj.tierMedal = `http://opgg-static.akamaized.net/images/medals/${queue.tier.toLowerCase()}_${romanToInt(queue.rank)}.png`;
             }
