@@ -28,6 +28,7 @@ app.get('/ping', (req, res) => {
   res.send('pong');
 });
 
+// Search for a Summoner's profile
 app.post('/search', (req, res) => {
   let query = API + encodeURI(req.body.user) + API_KEY;
   let profileIconId = null;
@@ -58,8 +59,10 @@ app.post('/search', (req, res) => {
     });
 });
 
+// For deploying production buiild
 app.get('/', (req, res) => {
   res.sendFile(join(__dirname, '../build', 'index.html'));
 });
 
+// Listening feedback
 app.listen(port, () => console.log(`Listening on port ${port}`));
