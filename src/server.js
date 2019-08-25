@@ -1,78 +1,68 @@
-require('dotenv').config()
-const express = require('express');
-const bodyParser = require('body-parser')
-const path = require('path');
-const request = require('request');
+// Node Packages
+import express from 'express';
+import { json } from 'body-parser';
+import { join } from 'path';
+import axios from 'axios';
+import { romanToInt } from './utils';
+
+// Load API Key
+require('dotenv').config();
+
+// Express
 const app = express();
 const port = process.env.PORT || 3001;
 
+// API
 const API = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/';
-const RANK_API = 'https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/'
-const API_KEY = '?api_key=' + process.env.API_KEY;
+const RANK_API = 'https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/';
+const API_KEY = `?api_key=${process.env.API_KEY}`;
 
-// helper function to print data in console
-printData = data => {
-  console.log(JSON.stringify(JSON.parse(data), null, 2));
-}
+// Use static content generated from build
+app.use(express.static(join(__dirname, '../build')));
 
-// helper function to convert roman numberals to integers
-romanToInt = num => {
-  let roman = ["I", "II", "III", "IV"];
-  let value = ["1", "2", "3", "4"];
-  for (let i = 0; i < roman.length; i++) {
-    if (roman[i] === num) {
-      return value[i].toString();
-    }
-  }
-  return "error";
-}
+// Parse application/json
+app.use(json());
 
-// use static content generated from build
-app.use(express.static(path.join(__dirname, '../build')));
-
-// parse application/json
-app.use(bodyParser.json())
-
-// test GET request
+// Test GET request
 app.get('/ping', (req, res) => {
   res.send('pong');
 });
 
+// Search for a Summoner's profile
 app.post('/search', (req, res) => {
   let query = API + encodeURI(req.body.user) + API_KEY;
-  request(query, (err, response, body) => {
-    if (!err && response.statusCode == 200) {
-      printData(body);
-      console.log('********************');
-      let parsedData = JSON.parse(body);
-      let query = RANK_API + parsedData.id + API_KEY;
-      console.log(query);
-      request(query, (err, response, body) => {
-        if (!err && response.statusCode == 200) {
-          printData(body);
-          let data = JSON.parse(body);
-          let returnObj = {}
-          data.forEach(queue => {
-            if (queue.queueType === "RANKED_SOLO_5x5") {
-              returnObj = queue;
-              returnObj.tierMedal = `http://opgg-static.akamaized.net/images/medals/${queue.tier.toLowerCase()}_${romanToInt(queue.rank)}.png`;
-            }
-          })
-          returnObj.profileIcon = `http://opgg-static.akamaized.net/images/profile_icons/profileIcon${parsedData.profileIconId}.jpg`;
-          returnObj.summonerName = parsedData.name;
-          res.send(returnObj);
-        } else {
-          res.send("bad request");
+  let profileIconId = null;
+  let summonerName = null;
+  axios.get(query)
+    .then((response) => {
+      const { data } = response;
+      query = RANK_API + data.id + API_KEY;
+      summonerName = data.name;
+      profileIconId = data.profileIconId;
+      return axios.get(query);
+    })
+    .then((response) => {
+      const { data } = response;
+      let returnObj = {};
+      data.forEach((queue) => {
+        if (queue.queueType === 'RANKED_SOLO_5x5') {
+          returnObj = queue;
+          returnObj.tierMedal = `http://opgg-static.akamaized.net/images/medals/${queue.tier.toLowerCase()}_${romanToInt(queue.rank)}.png`;
         }
-      })
-    } else {
-      res.send("bad request");
-    }
-  })
+      });
+      returnObj.profileIcon = `http://opgg-static.akamaized.net/images/profile_icons/profileIcon${profileIconId}.jpg`;
+      returnObj.summonerName = summonerName;
+      res.send(returnObj);
+    })
+    .catch(() => {
+      res.send('Invalid Summoner!');
+    });
 });
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, '../build', 'index.html'));
+// For deploying production buiild
+app.get('/', (req, res) => {
+  res.sendFile(join(__dirname, '../build', 'index.html'));
 });
 
+// Listening feedback
 app.listen(port, () => console.log(`Listening on port ${port}`));
