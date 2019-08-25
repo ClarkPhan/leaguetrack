@@ -27,14 +27,8 @@ class Searchbar extends Component {
     };
   }
 
-  handleChange = (searchText) => {
-    this.setState({
-      searchText: searchText.target.value,
-    });
-  }
-
-  handleSearch = (e) => {
-    e.preventDefault();
+  // The beefy search engine logic
+  handleSearch = () => {
     const { searchText } = this.state;
     if (searchText !== '') {
       this.setState({
@@ -65,19 +59,28 @@ class Searchbar extends Component {
     }
   }
 
-  handleModalExitClick = (e) => {
-    e.preventDefault();
+  // Handle search input field text change
+  handleChange = (searchText) => {
+    this.setState({
+      searchText: searchText.target.value,
+    });
+  }
+
+  // Unshows modal when user clicks on close button
+  handleModalExitClick = () => {
     this.setState({
       showModal: false,
     });
   }
 
+  // Handle submit on 'enter' keypress
   handleKeyPress = (e) => {
     if (e.keyCode === 13) {
       this.handleSearch(e);
     }
   }
 
+  // Reset error state when Searchbar is focused
   handleFocus = () => {
     this.setState({
       error: false,
