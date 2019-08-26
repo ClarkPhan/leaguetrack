@@ -101,7 +101,11 @@ class Searchbar extends Component {
                 </span>
               </div>
               <div className="control">
-                <button type="button" className={error ? 'button tooltip is-tooltip-active is-tooltip-danger is-medium' : 'button is-medium'} data-tooltip="Invalid Summoner Name!" onClick={this.handleSearch}>Search</button>
+                <button type="button" className={error ? 'button tooltip is-tooltip-active is-tooltip-danger is-medium' : 'button is-medium'} data-tooltip="Invalid Summoner Name!" onClick={this.handleSearch}>
+                  <span>
+                    <i className="fas fa-search" />
+                  </span>
+                </button>
               </div>
             </div>
           </div>
