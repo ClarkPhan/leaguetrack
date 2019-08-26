@@ -1,4 +1,4 @@
-import { ADD_SEARCH } from '../constants/actionTypes';
+import { ADD_SEARCH } from '../constants/searchbar/actionTypes';
 
 const initialState = {
   searches: [],
