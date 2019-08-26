@@ -1,11 +1,23 @@
-import { createStore, compose, applyMiddleware } from 'redux';
+import {
+  createStore,
+  combineReducers,
+  compose,
+  applyMiddleware,
+} from 'redux';
+
+// Redux middleware
 import ReduxThunk from 'redux-thunk';
 import logger from 'redux-logger';
-import rootReducer from './reducers/index';
 
+// Component reducers
+import searchbar from './reducers/searchbar/reducer';
+import modal from './reducers/modal/reducer';
 
 const store = createStore(
-  rootReducer,
+  combineReducers({
+    searchbar,
+    modal,
+  }),
   compose(
     applyMiddleware(ReduxThunk, logger),
   ),

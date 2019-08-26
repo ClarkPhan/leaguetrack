@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { addSearch } from '../../redux/actions/index';
+import Modal from '../modal/Modal';
+import { addSearch } from '../../redux/actions/searchbar/actionCreators';
+import displayModal from '../../redux/actions/modal/actionCreators';
 
 class Searchbar extends Component {
   constructor() {
@@ -23,9 +24,7 @@ class Searchbar extends Component {
         profileIcon: '',
         tierMedal: '',
       },
-      showModal: false,
       isLoading: false,
-      loadImages: false,
       error: null,
     };
   }
@@ -33,7 +32,7 @@ class Searchbar extends Component {
   // The beefy search engine logic
   handleSearch = () => {
     const { searchText } = this.state;
-    const { addSearchHistory } = this.props;
+    const { addSearchHistory, showModal } = this.props;
     if (searchText !== '') {
       this.setState({
         isLoading: true,
@@ -43,18 +42,16 @@ class Searchbar extends Component {
         .then((response) => {
           const { data } = response;
           if (data !== 'Invalid Summoner!') {
-            addSearchHistory(searchText);
             this.setState({
-              searchResults: response.data,
+              searchResults: data,
               isLoading: false,
-              showModal: true,
-              loadImages: true,
             });
+            addSearchHistory(searchText);
+            showModal(true);
           } else {
             this.setState({
-              showModal: false,
-              isLoading: false,
               error: true,
+              isLoading: false,
             });
           }
         })
@@ -68,13 +65,6 @@ class Searchbar extends Component {
   handleChange = (searchText) => {
     this.setState({
       searchText: searchText.target.value,
-    });
-  }
-
-  // Unshows modal when user clicks on close button
-  handleModalExitClick = () => {
-    this.setState({
-      showModal: false,
     });
   }
 
@@ -95,8 +85,6 @@ class Searchbar extends Component {
   render() {
     const {
       isLoading,
-      loadImages,
-      showModal,
       error,
       searchResults,
     } = this.state;
@@ -118,86 +106,26 @@ class Searchbar extends Component {
             </div>
           </div>
         </nav>
-        <div className={showModal ? 'modal is-active' : 'modal'}>
-          <div className="modal-background" />
-          <div className="modal-content">
-            <div className="modal-card">
-              <header className="modal-card-head">
-                <div className="modal-card-title has-text-centered">
-                  {isLoading ? <div className="has-text-centered">Loading...</div>
-                    : (
-                      <div>
-                        <div className="level">
-                          <div className="level-item">
-                            <img className="profilePic-resize" src={loadImages ? searchResults.profileIcon : null} alt="profile icon" />
-                            {searchResults.summonerName}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                </div>
-                <button type="button" className="delete" aria-label="close" onClick={this.handleModalExitClick} />
-              </header>
-              <section className="modal-card-body">
-                {isLoading ? <div className="has-text-centered"><FontAwesomeIcon icon="spinner" pulse size="6x" /></div>
-                  : (
-                    <div className="has-text-centered">
-                      {searchResults.tier === undefined
-                        ? (
-                          <div>
-                            <figure className="image is-280x280">
-                              <img className="medal-resize" alt="ranked logo" src={loadImages ? 'http://opgg-static.akamaized.net/images/medals/default.png' : null} />
-                            </figure>
-                          </div>
-                        )
-                        : (
-                          <div>
-                            <p><strong>{searchResults.leagueName}</strong></p>
-                            <figure className="image is-280x280">
-                              <img
-                                className="medal-resize"
-                                alt="ranked logo"
-                                src={loadImages ? searchResults.tierMedal : null}
-                              />
-                            </figure>
-                            <p>
-                              Tier:
-                              {`${searchResults.tier} ${searchResults.rank}`}
-                            </p>
-                            <p>Queue: Solo/Duo</p>
-                            <p>
-                              LP:
-                              {searchResults.leaguePoints}
-                            </p>
-                            <p>
-                              Wins:
-                              {searchResults.wins}
-                            </p>
-                            <p>
-                              Losses:
-                              {searchResults.losses}
-                            </p>
-                          </div>
-                        )}
-                    </div>
-                  )}
-              </section>
-            </div>
-          </div>
-        </div>
+        <Modal summonerData={searchResults} isLoading={isLoading} />
       </div>
     );
   }
 }
 
-Searchbar.propTypes = {
-  addSearchHistory: PropTypes.func.isRequired,
-  searchHistory: PropTypes.arrayOf(PropTypes.string).isRequired,
+Searchbar.defaultProps = {
+  searchHistory: [],
 };
 
-const mapStateToProps = (state) => ({ searchHistory: state.searches });
+Searchbar.propTypes = {
+  addSearchHistory: PropTypes.func.isRequired,
+  showModal: PropTypes.func.isRequired,
+  searchHistory: PropTypes.arrayOf(PropTypes.string),
+};
+
+const mapStateToProps = (state) => ({ searchHistory: state.searchbar.searches });
 const mapDispatchToProps = (dispatch) => ({
   addSearchHistory: (search) => dispatch(addSearch(search)),
+  showModal: (payload) => dispatch(displayModal(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Searchbar);
