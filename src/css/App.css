@@ -33,3 +33,7 @@ img.profilePic-resize {
 .fa-search {
     color: #dbdbdb;
 }
+
+*:focus {
+    box-shadow: none !important
+}
