@@ -1,10 +1,10 @@
-import { ADD_SEARCH } from '../constants/searchbar/actionTypes';
+import { ADD_SEARCH } from '../../constants/searchbar/actionTypes';
 
 const initialState = {
   searches: [],
 };
 
-const rootReducer = (state = initialState, action) => {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case ADD_SEARCH: {
       return {
@@ -16,5 +16,3 @@ const rootReducer = (state = initialState, action) => {
       return state;
   }
 };
-
-export default rootReducer;
