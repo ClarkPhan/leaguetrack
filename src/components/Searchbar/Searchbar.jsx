@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,7 +10,6 @@ class Searchbar extends Component {
     super();
     this.state = {
       searchText: '',
-      searchHistory: [],
       searchResults: {
         leagueName: '',
         tier: 'bronze',
@@ -190,7 +190,12 @@ class Searchbar extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({ searches: state.searchHistory });
+Searchbar.propTypes = {
+  addSearchHistory: PropTypes.func.isRequired,
+  searchHistory: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
+const mapStateToProps = (state) => ({ searchHistory: state.searches });
 const mapDispatchToProps = (dispatch) => ({
   addSearchHistory: (search) => dispatch(addSearch(search)),
 });
