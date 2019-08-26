@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { addSearch } from '../../redux/actions/index';
 
 class Searchbar extends Component {
   constructor() {
     super();
     this.state = {
       searchText: '',
+      searchHistory: [],
       searchResults: {
         leagueName: '',
         tier: 'bronze',
@@ -30,6 +33,7 @@ class Searchbar extends Component {
   // The beefy search engine logic
   handleSearch = () => {
     const { searchText } = this.state;
+    const { addSearchHistory } = this.props;
     if (searchText !== '') {
       this.setState({
         isLoading: true,
@@ -39,6 +43,7 @@ class Searchbar extends Component {
         .then((response) => {
           const { data } = response;
           if (data !== 'Invalid Summoner!') {
+            addSearchHistory(searchText);
             this.setState({
               searchResults: response.data,
               isLoading: false,
@@ -185,4 +190,9 @@ class Searchbar extends Component {
   }
 }
 
-export default Searchbar;
+const mapStateToProps = (state) => ({ searches: state.searchHistory });
+const mapDispatchToProps = (dispatch) => ({
+  addSearchHistory: (search) => dispatch(addSearch(search)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Searchbar);
