@@ -95,13 +95,13 @@ class Searchbar extends Component {
           <div className="level-item has-text-centered">
             <div className="field has-addons">
               <div className={isLoading ? 'has-icons-left control is-loading' : 'has-icons-left control'}>
-                <input className="input" type="text" placeholder="Search for a user" onChange={this.handleChange} onKeyDown={this.handleKeyPress} onFocus={this.handleFocus} />
+                <input className="input is-medium" type="text" placeholder="Search for a user" onChange={this.handleChange} onKeyDown={this.handleKeyPress} onFocus={this.handleFocus} />
                 <span className="icon is-small is-left">
                   <i className="fas fa-user" />
                 </span>
               </div>
               <div className="control">
-                <button type="button" className={error ? 'button tooltip is-tooltip-active is-tooltip-danger' : 'button'} data-tooltip="Invalid Summoner Name!" onClick={this.handleSearch}>Search</button>
+                <button type="button" className={error ? 'button tooltip is-tooltip-active is-tooltip-danger is-medium' : 'button is-medium'} data-tooltip="Invalid Summoner Name!" onClick={this.handleSearch}>Search</button>
               </div>
             </div>
           </div>
