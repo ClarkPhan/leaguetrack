@@ -9,7 +9,7 @@ export default function reducer(state = initialState, action) {
     case ADD_SEARCH: {
       return {
         ...state,
-        searches: [action.payload],
+        searches: [...state.searches, action.payload],
       };
     }
     default:

@@ -25,6 +25,7 @@ class Searchbar extends Component {
         tierMedal: '',
       },
       isLoading: false,
+      displaySearchHistory: false,
       error: null,
     };
   }
@@ -46,7 +47,7 @@ class Searchbar extends Component {
               searchResults: data,
               isLoading: false,
             });
-            addSearchHistory(searchText);
+            addSearchHistory(searchText.toLowerCase());
             showModal(true);
           } else {
             this.setState({
@@ -78,8 +79,33 @@ class Searchbar extends Component {
   // Reset error state when Searchbar is focused
   handleFocus = () => {
     this.setState({
+      displaySearchHistory: true,
       error: false,
     });
+  }
+
+  // Close search history drop down on unfocus
+  handleUnfocus = () => {
+    this.setState({
+      displaySearchHistory: false,
+    });
+  }
+
+  generateSearchHistory = (searchHistory) => {
+    const searches = searchHistory.map((search) => (
+      <div className="control">
+        <div className="tags has-addons">
+          <a className="tag is-link is-capitalized">{search}</a>
+          <a type="button" className="tag is-delete" />
+        </div>
+      </div>
+    ));
+
+    return (
+      <div className="field is-grouped is-grouped-multiline">
+        {searches}
+      </div>
+    );
   }
 
   render() {
@@ -87,18 +113,33 @@ class Searchbar extends Component {
       isLoading,
       error,
       searchResults,
+      displaySearchHistory,
     } = this.state;
+
+    const { searchHistory } = this.props;
 
     return (
       <div>
         <nav className="level">
           <div className="level-item has-text-centered">
-            <div className="field has-addons">
-              <div className={isLoading ? 'has-icons-left control is-loading' : 'has-icons-left control'}>
-                <input className="input is-medium" type="text" placeholder="Search for a user" onChange={this.handleChange} onKeyDown={this.handleKeyPress} onFocus={this.handleFocus} />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-user" />
-                </span>
+            <div className={`${searchHistory.length > 0 && displaySearchHistory ? 'is-active' : ''} dropdown field has-addons`}>
+              <div className="dropdown-trigger">
+                <div className={isLoading ? 'has-icons-left control is-loading' : 'has-icons-left control'}>
+                  <input className="input is-medium" type="text" placeholder="Search for a user" onChange={this.handleChange} onKeyDown={this.handleKeyPress} onFocus={this.handleFocus} onBlur={this.handleUnfocus} />
+                  <span className="icon is-small is-left">
+                    <i className="fas fa-user" />
+                  </span>
+                </div>
+              </div>
+              <div className="dropdown-menu">
+                <div className="dropdown-content has-text-left">
+                  <div className="dropdown-item">
+                    <h6 className="title is-6">Recent Searches</h6>
+                  </div>
+                  <div className="dropdown-item">
+                    {this.generateSearchHistory(searchHistory)}
+                  </div>
+                </div>
               </div>
               <div className="control">
                 <button type="button" className={error ? 'button tooltip is-tooltip-active is-tooltip-danger is-medium' : 'button is-medium'} data-tooltip="Invalid Summoner Name!" onClick={this.handleSearch}>

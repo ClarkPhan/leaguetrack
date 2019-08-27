@@ -22,7 +22,7 @@ img.profilePic-resize {
 }
 
 #landingPage {
-    padding: 4rem 1.5rem;
+    padding: 4rem 1.5rem 7rem;
 }
 
 #landingPageFooter {
@@ -36,4 +36,9 @@ img.profilePic-resize {
 
 *:focus {
     box-shadow: none !important
+}
+
+.dropdown-menu {
+    padding: 0px;
+    min-width: -webkit-fill-available;
 }
