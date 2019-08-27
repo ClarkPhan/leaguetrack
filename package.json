@@ -33,6 +33,7 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
+    "dev": "npm run client & npm run server",
     "client": "react-scripts start & npm run css-watch",
     "server": "nodemon -r esm ./src/server.js",
     "build": "react-scripts build",

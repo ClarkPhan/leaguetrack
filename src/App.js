@@ -1,7 +1,7 @@
 import React from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import Searchbar from './components/searchbar/Searchbar';
+import Searchbar from './components/Searchbar/Searchbar';
 import LeagueTrackLogo from './images/LeagueTrackLogo.png';
 
 import './css/App.css';
