@@ -41,4 +41,5 @@ img.profilePic-resize {
 .dropdown-menu {
     padding: 0px;
     min-width: -webkit-fill-available;
+    min-width: -moz-available;
 }
