@@ -1,4 +1,4 @@
-import { ADD_SEARCH, DELETE_SEARCH} from '../../constants/searchbar/actionTypes';
+import { ADD_SEARCH, DELETE_SEARCH } from '../../constants/searchbar/actionTypes';
 
 const initialState = {
   searches: [],
@@ -7,6 +7,12 @@ const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case ADD_SEARCH: {
+      if (state.searches.includes(action.payload)) {
+        return {
+          ...state,
+          searches: [...state.searches],
+        };
+      }
       return {
         ...state,
         searches: [...state.searches, action.payload],
