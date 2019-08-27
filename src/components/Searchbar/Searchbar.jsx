@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import Modal from '../modal/Modal';
-import { addSearch } from '../../redux/actions/searchbar/actionCreators';
+import { addSearch, deleteSearch } from '../../redux/actions/searchbar/actionCreators';
 import displayModal from '../../redux/actions/modal/actionCreators';
 
 class Searchbar extends Component {
@@ -92,11 +92,22 @@ class Searchbar extends Component {
   }
 
   generateSearchHistory = (searchHistory) => {
+    const { removeSearchHistory } = this.props;
     const searches = searchHistory.map((search) => (
-      <div className="control">
+      <div id={search} className="control">
         <div className="tags has-addons">
-          <a className="tag is-link is-capitalized">{search}</a>
-          <a type="button" className="tag is-delete" />
+          <button type="button" className="tag is-link is-capitalized link-button">{search}</button>
+          {/* <a role="button" className="tag is-link is-capitalized">{search}</a> */}
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            type="button"
+            className="tag is-delete link-button"
+            onClick={() => {
+              const elm = document.getElementById(search);
+              removeSearchHistory(search);
+              elm.remove();
+            }}
+          />
         </div>
       </div>
     ));
@@ -122,7 +133,7 @@ class Searchbar extends Component {
       <div>
         <nav className="level">
           <div className="level-item has-text-centered">
-            <div className={`${searchHistory.length > 0 && displaySearchHistory ? 'is-active' : ''} dropdown field has-addons`}>
+            <div className={`${searchHistory.length > 0 && displaySearchHistory ? 'is-active' : ''} is-active dropdown field has-addons`}>
               <div className="dropdown-trigger">
                 <div className={isLoading ? 'has-icons-left control is-loading' : 'has-icons-left control'}>
                   <input className="input is-medium" type="text" placeholder="Search for a user" onChange={this.handleChange} onKeyDown={this.handleKeyPress} onFocus={this.handleFocus} onBlur={this.handleUnfocus} />
@@ -163,13 +174,15 @@ Searchbar.defaultProps = {
 
 Searchbar.propTypes = {
   addSearchHistory: PropTypes.func.isRequired,
+  removeSearchHistory: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
-  searchHistory: PropTypes.arrayOf(PropTypes.string),
+  searchHistory: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
 };
 
 const mapStateToProps = (state) => ({ searchHistory: state.searchbar.searches });
 const mapDispatchToProps = (dispatch) => ({
   addSearchHistory: (search) => dispatch(addSearch(search)),
+  removeSearchHistory: (search) => dispatch(deleteSearch(search)),
   showModal: (payload) => dispatch(displayModal(payload)),
 });
 
