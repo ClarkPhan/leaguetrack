@@ -33,12 +33,13 @@ class Searchbar extends Component {
   // The beefy search engine logic
   handleSearch = () => {
     const { searchText } = this.state;
-    const { addSearchHistory, showModal } = this.props;
+    const { searchHistory, addSearchHistory, showModal } = this.props;
     if (searchText !== '') {
       this.setState({
         isLoading: true,
         error: false,
       });
+      // Request search results from server
       axios.post('/search', { user: searchText })
         .then((response) => {
           const { data } = response;
@@ -47,7 +48,9 @@ class Searchbar extends Component {
               searchResults: data,
               isLoading: false,
             });
-            addSearchHistory(searchText.toLowerCase());
+            if (!searchHistory.includes(searchText)) {
+              addSearchHistory(searchText.toLowerCase());
+            }
             showModal(true);
           } else {
             this.setState({
@@ -85,7 +88,14 @@ class Searchbar extends Component {
   }
 
   // Close search history drop down on unfocus
-  handleUnfocus = () => {
+  handleUnfocus = (e) => {
+    // Does not unfocus on relate elements
+    if (e.relatedTarget) {
+      const { className } = e.relatedTarget;
+      if (className === 'tag is-delete link-button') {
+        return;
+      }
+    }
     this.setState({
       displaySearchHistory: false,
     });
@@ -93,30 +103,29 @@ class Searchbar extends Component {
 
   generateSearchHistory = (searchHistory) => {
     const { removeSearchHistory } = this.props;
-    const searches = searchHistory.map((search) => (
-      <div id={search} className="control">
-        <div className="tags has-addons">
-          <button type="button" className="tag is-link is-capitalized link-button">{search}</button>
-          {/* <a role="button" className="tag is-link is-capitalized">{search}</a> */}
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            type="button"
-            className="tag is-delete link-button"
-            onClick={() => {
-              const elm = document.getElementById(search);
-              removeSearchHistory(search);
-              elm.remove();
-            }}
-          />
+    if (searchHistory.length > 0) {
+      const searches = searchHistory.map((search) => (
+        <div id={search} key={search} className="control">
+          <div className="tags has-addons">
+            <button type="button" className="tag is-link is-capitalized link-button">{search}</button>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              type="button"
+              className="tag is-delete link-button"
+              onClick={() => {
+                removeSearchHistory(search);
+              }}
+            />
+          </div>
         </div>
-      </div>
-    ));
-
-    return (
-      <div className="field is-grouped is-grouped-multiline">
-        {searches}
-      </div>
-    );
+      ));
+      return (
+        <div className="field is-grouped is-grouped-multiline">
+          {searches}
+        </div>
+      );
+    }
+    return null;
   }
 
   render() {
@@ -126,17 +135,23 @@ class Searchbar extends Component {
       searchResults,
       displaySearchHistory,
     } = this.state;
-
     const { searchHistory } = this.props;
-
     return (
       <div>
         <nav className="level">
           <div className="level-item has-text-centered">
-            <div className={`${searchHistory.length > 0 && displaySearchHistory ? 'is-active' : ''} is-active dropdown field has-addons`}>
+            <div className={`${searchHistory.length > 0 && displaySearchHistory ? 'is-active' : ''} dropdown field has-addons`}>
               <div className="dropdown-trigger">
-                <div className={isLoading ? 'has-icons-left control is-loading' : 'has-icons-left control'}>
-                  <input className="input is-medium" type="text" placeholder="Search for a user" onChange={this.handleChange} onKeyDown={this.handleKeyPress} onFocus={this.handleFocus} onBlur={this.handleUnfocus} />
+                <div className={`${isLoading ? 'is-loading' : ''} has-icons-left control`}>
+                  <input
+                    className="input is-medium"
+                    type="text"
+                    placeholder="Search for a user"
+                    onChange={this.handleChange}
+                    onKeyDown={this.handleKeyPress}
+                    onFocus={this.handleFocus}
+                    onBlur={this.handleUnfocus}
+                  />
                   <span className="icon is-small is-left">
                     <i className="fas fa-user" />
                   </span>
@@ -153,10 +168,13 @@ class Searchbar extends Component {
                 </div>
               </div>
               <div className="control">
-                <button type="button" className={error ? 'button tooltip is-tooltip-active is-tooltip-danger is-medium' : 'button is-medium'} data-tooltip="Invalid Summoner Name!" onClick={this.handleSearch}>
-                  <span>
-                    <i className="fas fa-search" />
-                  </span>
+                <button
+                  type="button"
+                  className={`${error ? 'tooltip is-tooltip-active is-tooltip-danger' : ''} button is-medium`}
+                  data-tooltip="Invalid Summoner Name!"
+                  onClick={this.handleSearch}
+                >
+                  <span><i className="fas fa-search" /></span>
                 </button>
               </div>
             </div>
@@ -180,6 +198,7 @@ Searchbar.propTypes = {
 };
 
 const mapStateToProps = (state) => ({ searchHistory: state.searchbar.searches });
+
 const mapDispatchToProps = (dispatch) => ({
   addSearchHistory: (search) => dispatch(addSearch(search)),
   removeSearchHistory: (search) => dispatch(deleteSearch(search)),
