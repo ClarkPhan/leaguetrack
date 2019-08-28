@@ -45,6 +45,7 @@ class Searchbar extends Component {
           this.setState({
             searchResults: data,
             isLoading: false,
+            displaySearchHistory: false,
           });
           if (!searchHistory.includes(user)) {
             addSearchHistory(user.toLowerCase());
