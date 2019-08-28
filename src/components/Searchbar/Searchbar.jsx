@@ -31,37 +31,42 @@ class Searchbar extends Component {
   }
 
   // The beefy search engine logic
+  requestSearchData = (user) => {
+    const { searchHistory, addSearchHistory, showModal } = this.props;
+    this.setState({
+      isLoading: true,
+      error: false,
+    });
+    // Request search results from server
+    axios.post('/search', { user })
+      .then((response) => {
+        const { data } = response;
+        if (data !== 'Invalid Summoner!') {
+          this.setState({
+            searchResults: data,
+            isLoading: false,
+          });
+          if (!searchHistory.includes(user)) {
+            addSearchHistory(user.toLowerCase());
+          }
+          showModal(true);
+        } else {
+          this.setState({
+            error: true,
+            isLoading: false,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  // Handle search button onClick event
   handleSearch = () => {
     const { searchText } = this.state;
-    const { searchHistory, addSearchHistory, showModal } = this.props;
     if (searchText !== '') {
-      this.setState({
-        isLoading: true,
-        error: false,
-      });
-      // Request search results from server
-      axios.post('/search', { user: searchText })
-        .then((response) => {
-          const { data } = response;
-          if (data !== 'Invalid Summoner!') {
-            this.setState({
-              searchResults: data,
-              isLoading: false,
-            });
-            if (!searchHistory.includes(searchText)) {
-              addSearchHistory(searchText.toLowerCase());
-            }
-            showModal(true);
-          } else {
-            this.setState({
-              error: true,
-              isLoading: false,
-            });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      this.requestSearchData(searchText);
     }
   }
 
@@ -92,7 +97,7 @@ class Searchbar extends Component {
     // Does not unfocus on relate elements
     if (e.relatedTarget) {
       const { className } = e.relatedTarget;
-      if (className === 'tag is-delete link-button') {
+      if (className === 'tag is-delete link-button' || className === 'tag is-link is-capitalized link-button') {
         return;
       }
     }
@@ -104,16 +109,24 @@ class Searchbar extends Component {
   generateSearchHistory = (searchHistory) => {
     const { removeSearchHistory } = this.props;
     if (searchHistory.length > 0) {
-      const searches = searchHistory.map((search) => (
-        <div id={search} key={search} className="control">
+      const searches = searchHistory.map((user) => (
+        <div id={user} key={user} className="control">
           <div className="tags has-addons">
-            <button type="button" className="tag is-link is-capitalized link-button">{search}</button>
+            <button
+              type="button"
+              className="tag is-link is-capitalized link-button"
+              onClick={() => {
+                this.requestSearchData(user);
+              }}
+            >
+              {user}
+            </button>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="tag is-delete link-button"
               onClick={() => {
-                removeSearchHistory(search);
+                removeSearchHistory(user);
               }}
             />
           </div>
