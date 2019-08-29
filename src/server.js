@@ -17,6 +17,10 @@ const API = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/';
 const RANK_API = 'https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/';
 const API_KEY = `?api_key=${process.env.API_KEY}`;
 
+// Riot Data Dragon
+const PATCH_VERSION = '9.17.1';
+const DATA_DRAGON = `http://ddragon.leagueoflegends.com/cdn/${PATCH_VERSION}`;
+
 // Use static content generated from build
 app.use(express.static(join(__dirname, '../build')));
 
@@ -50,7 +54,7 @@ app.post('/search', (req, res) => {
           returnObj.tierMedal = `http://opgg-static.akamaized.net/images/medals/${queue.tier.toLowerCase()}_${romanToInt(queue.rank)}.png`;
         }
       });
-      returnObj.profileIcon = `http://opgg-static.akamaized.net/images/profile_icons/profileIcon${profileIconId}.jpg`;
+      returnObj.profileIcon = `http://ddragon.leagueoflegends.com/cdn/${PATCH_VERSION}/img/profileicon/${profileIconId}.png`;
       returnObj.summonerName = summonerName;
       res.send(returnObj);
     })
