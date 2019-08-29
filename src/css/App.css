@@ -22,10 +22,38 @@ img.profilePic-resize {
 }
 
 #landingPage {
-    padding: 4rem 1.5rem;
+    padding: 4rem 1.5rem 7rem;
 }
 
 #landingPageFooter {
     background-color: #fafafa;
     padding: 3rem 1.5rem 3rem;
+}
+
+.fa-search {
+    color: #dbdbdb;
+}
+
+*:focus {
+    box-shadow: none !important
+}
+
+.dropdown-menu {
+    padding: 0px;
+    min-width: -webkit-fill-available;
+    min-width: -moz-available;
+}
+
+.link-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline;
+    margin: 0;
+    padding: 0;
+  }
+
+.link-button:hover, .link-button:focus {
+    text-decoration: none;
 }
