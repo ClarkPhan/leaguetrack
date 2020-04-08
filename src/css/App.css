@@ -48,3 +48,7 @@ img.profilePic-resize {
 .link-button:hover, .link-button:focus {
     text-decoration: none;
 }
+
+.hero {
+    background-color: #5383e8;
+}
