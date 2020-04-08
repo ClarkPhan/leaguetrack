@@ -5,7 +5,7 @@
     },
     "extends": [
         "eslint:recommended",
-        "airbnb",
+        "airbnb"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -20,12 +20,13 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react",
+        "react"
     ],
     "rules": {
         "linebreak-style": 0,
         "no-console": "off",
         "no-tabs": 0,
         "no-mixed-spaces-and-tabs": [2, "smart-tabs"],
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
     }
 }
