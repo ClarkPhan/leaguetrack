@@ -16,9 +16,10 @@ const port = process.env.PORT || 3001;
 const API = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/';
 const RANK_API = 'https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/';
 const API_KEY = `?api_key=${process.env.API_KEY}`;
+console.log(API_KEY)
 
 // Riot Data Dragon
-const PATCH_VERSION = '9.17.1';
+const PATCH_VERSION = '10.7.1';
 const DATA_DRAGON = `http://ddragon.leagueoflegends.com/cdn/${PATCH_VERSION}`;
 
 // Use static content generated from build
