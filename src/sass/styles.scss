@@ -3,4 +3,8 @@
 // Update Bulma's global variables
 $family-sans-serif: "Ubuntu", sans-serif;
 @import "../../node_modules/bulma/bulma.sass";
-@import '../../node_modules/bulma-tooltip/dist/css/bulma-tooltip.sass';
+@import '../../node_modules/@creativebulma/bulma-tooltip/src/sass/index.sass';
+@import '../../node_modules/@creativebulma/bulma-tooltip/src/sass/_variables.sass';
+@import '../../node_modules/@creativebulma/bulma-tooltip/src/sass/_responsiveness.sass';
+@import '../../node_modules/@creativebulma/bulma-tooltip/src/sass/_position.sass';
+@import '../../node_modules/@creativebulma/bulma-tooltip/src/sass/_animation.sass';
