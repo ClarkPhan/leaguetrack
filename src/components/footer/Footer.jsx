@@ -1,12 +1,6 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
-class Footer extends Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
-
-
+class Footer extends PureComponent {
   render() {
     return (
       <footer className="footer">

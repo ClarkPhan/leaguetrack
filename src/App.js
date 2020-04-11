@@ -1,25 +1,31 @@
 import React from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import Searchbar from './components/searchbar/Searchbar';
-import Footer from './components/footer/Footer';
-import LeagueTrackLogo from './images/LeagueTrackLogo.png';
-
+import Navbar from './components/navbar/Navbar';
+import SummonerPage from './components/pages/SummonerPage';
 import './css/App.css';
+import LandingPage from './components/pages/LandingPage';
 
 library.add(faSpinner);
 
 const App = () => (
-  <div>
-    <div className="hero is-fullheight">
-      <div className="container">
-        <figure className="image"><img className="resize" src={LeagueTrackLogo} alt="logo" /></figure>
-        <Searchbar />
-      </div>
-      <Footer />
-    </div>
-
-  </div>
+  <Router>
+    <Route
+      exact
+      path="/"
+      component={LandingPage}
+    />
+    <Route
+      path="/summoner/:username"
+      component={() => (
+        <div>
+          <Navbar />
+          <SummonerPage />
+        </div>
+      )}
+    />
+  </Router>
 );
 
 

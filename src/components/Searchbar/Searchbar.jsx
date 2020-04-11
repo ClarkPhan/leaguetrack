@@ -1,56 +1,60 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Redirect, withRouter } from 'react-router-dom';
 import axios from 'axios';
-import Modal from '../modal/Modal';
 import { addSearch, deleteSearch } from '../../redux/actions/searchbar/actionCreators';
-import displayModal from '../../redux/actions/modal/actionCreators';
+import { createProfile } from '../../redux/actions/summonerProfile/actionCreators';
 
 class Searchbar extends Component {
   constructor() {
     super();
     this.state = {
       searchText: '',
-      searchResults: {
-        leagueName: '',
-        tier: 'bronze',
-        queueType: '',
-        rank: 'IV',
-        summonerId: '',
-        summonerName: '',
-        leaguePoints: 0,
-        wins: 0,
-        losses: 0,
-        profileIcon: '',
-        tierMedal: '',
-      },
       isLoading: false,
       displaySearchHistory: false,
       error: null,
+      redirectURL: null,
     };
   }
 
   // The beefy search engine logic
   requestSearchData = (user) => {
-    const { searchHistory, addSearchHistory, showModal } = this.props;
+    const {
+      searchHistory,
+      addSearchHistory,
+      updateSummonerData,
+      enableRedirect,
+      history,
+    } = this.props;
+
     this.setState({
       isLoading: true,
       error: false,
     });
+
     // Request search results from server
     axios.post('/search', { user })
       .then((response) => {
         const { data } = response;
         if (data !== 'Invalid Summoner!') {
           this.setState({
-            searchResults: data,
             isLoading: false,
             displaySearchHistory: false,
           });
           if (!searchHistory.includes(user)) {
             addSearchHistory(user.toLowerCase());
           }
-          showModal(true);
+          // Trigger modal
+          // showModal(true);
+          updateSummonerData(data);
+          if (!enableRedirect) {
+            console.log(history);
+            // eslint-disable-next-line react/prop-types
+            history.push(`/summoner/${user}`);
+          } else {
+            this.setState({ redirectURL: `/summoner/${user}` });
+          }
         } else {
           this.setState({
             error: true,
@@ -146,10 +150,14 @@ class Searchbar extends Component {
     const {
       isLoading,
       error,
-      searchResults,
       displaySearchHistory,
+      redirectURL,
     } = this.state;
-    const { searchHistory } = this.props;
+    const { searchHistory, enableRedirect, position } = this.props;
+    console.log(position);
+    if (enableRedirect && redirectURL) {
+      return <Redirect to={redirectURL} />;
+    }
     return (
       <div>
         <nav className="level">
@@ -184,8 +192,10 @@ class Searchbar extends Component {
               <div className="control">
                 <button
                   type="button"
-                  className={`${error ? 'tooltip is-tooltip-active is-tooltip-danger' : ''} button is-medium`}
-                  data-tooltip="Invalid Summoner Name!"
+                  className={`${error ? 'has-tooltip-danger has-tooltip-arrow has-tooltip-active' : null}
+                              ${error && position === 'right' ? 'has-tooltip-right' : null}
+                              button is-medium`}
+                  data-tooltip={error ? 'Invalid Summoner Name!' : null}
                   onClick={this.handleSearch}
                 >
                   <span><i className="fas fa-search" /></span>
@@ -194,7 +204,7 @@ class Searchbar extends Component {
             </div>
           </div>
         </nav>
-        <Modal summonerData={searchResults} isLoading={isLoading} />
+        {/* <Modal summonerData={searchResults} isLoading={isLoading} /> */}
       </div>
     );
   }
@@ -202,13 +212,25 @@ class Searchbar extends Component {
 
 Searchbar.defaultProps = {
   searchHistory: [],
+  enableRedirect: true,
 };
 
 Searchbar.propTypes = {
   addSearchHistory: PropTypes.func.isRequired,
   removeSearchHistory: PropTypes.func.isRequired,
-  showModal: PropTypes.func.isRequired,
+  updateSummonerData: PropTypes.func.isRequired,
   searchHistory: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
+  enableRedirect: PropTypes.bool,
+  history: PropTypes.shape({
+    length: PropTypes.number,
+    action: PropTypes.string,
+    location: PropTypes.shape({
+      pathname: PropTypes.string,
+      search: PropTypes.string,
+      hash: PropTypes.string,
+      key: PropTypes.string,
+    }),
+  }).isRequired,
 };
 
 const mapStateToProps = (state) => ({ searchHistory: state.searchbar.searches });
@@ -216,7 +238,7 @@ const mapStateToProps = (state) => ({ searchHistory: state.searchbar.searches })
 const mapDispatchToProps = (dispatch) => ({
   addSearchHistory: (search) => dispatch(addSearch(search)),
   removeSearchHistory: (search) => dispatch(deleteSearch(search)),
-  showModal: (payload) => dispatch(displayModal(payload)),
+  updateSummonerData: (data) => dispatch(createProfile(data)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Searchbar);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Searchbar));

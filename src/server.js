@@ -18,7 +18,7 @@ const RANK_API = 'https://na1.api.riotgames.com/lol/league/v4/entries/by-summone
 const API_KEY = `?api_key=${process.env.API_KEY}`;
 
 // Riot Data Dragon
-const PATCH_VERSION = '9.17.1';
+const PATCH_VERSION = '10.7.1';
 const DATA_DRAGON = `http://ddragon.leagueoflegends.com/cdn/${PATCH_VERSION}`;
 
 // Use static content generated from build
