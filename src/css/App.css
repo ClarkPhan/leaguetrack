@@ -8,7 +8,7 @@ img.resize {
 
 img.medal-resize {
     height: auto;
-    width: 30%;
+    width: 20%;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -17,7 +17,7 @@ img.medal-resize {
 
 img.profilePic-resize {
     height: auto;
-    width: 15%;
+    width: 10%;
 
 }
 
@@ -51,4 +51,30 @@ img.profilePic-resize {
 
 .hero {
     background-color: #5383e8;
+}
+
+#summoner-page {
+    background-color: white;
+    height: 100vh;
+    font-size: 15px;
+}
+
+.has-text-grandmaster {
+    color: #7d544c;
+}
+
+.has-text-master {
+    color: #992da0;
+}
+
+.has-text-gold {
+    color: gold;
+}
+
+.has-text-silver {
+    color:silver;
+}
+
+.has-text-bronze {
+    color: brown
 }
