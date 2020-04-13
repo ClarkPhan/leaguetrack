@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 
-class Footer extends PureComponent {
+export default class Footer extends PureComponent {
   render() {
     return (
       <footer className="footer">
@@ -8,7 +8,7 @@ class Footer extends PureComponent {
           <p>
             <strong>LeagueTrack</strong>
             {' '}
-            by
+            <span className="has-text-black">by</span>
             {' '}
             <a href="http://clarkphan.com" target="_blank" rel="noopener noreferrer">Clark P</a>
           </p>
@@ -17,5 +17,3 @@ class Footer extends PureComponent {
     );
   }
 }
-
-export default Footer;

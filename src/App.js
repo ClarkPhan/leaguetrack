@@ -1,32 +1,40 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, useParams, Switch } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import Navbar from './components/navbar/Navbar';
+import LandingPage from './components/pages/LandingPage';
 import SummonerPage from './components/pages/SummonerPage';
 import './css/App.css';
-import LandingPage from './components/pages/LandingPage';
+import ErrorPage from './components/pages/ErrorPage';
 
 library.add(faSpinner);
 
 const App = () => (
   <Router>
-    <Route
-      exact
-      path="/"
-      component={LandingPage}
-    />
-    <Route
-      path="/summoner/:username"
-      component={() => (
-        <div>
-          <Navbar />
-          <SummonerPage />
-        </div>
-      )}
-    />
+    <Switch>
+      <Route
+        exact
+        path="/"
+        component={LandingPage}
+      />
+      <Route
+        path="/summoner/:username"
+        // eslint-disable-next-line react/no-children-prop
+        children={<Child />}
+      />
+      <Route
+        path="*"
+        component={ErrorPage}
+      />
+    </Switch>
   </Router>
 );
 
+const Child = () => {
+  const { username } = useParams();
+  return (
+    <SummonerPage username={username} />
+  );
+};
 
 export default App;

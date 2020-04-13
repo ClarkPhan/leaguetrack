@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import Searchbar from '../searchbar/Searchbar';
 
 import LeagueTrackLogo from '../../images/LeagueTrackLogo.png';
 
 export default class Navbar extends PureComponent {
   render() {
+    const {username} = this.props;
     return (
       <div>
         <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -15,6 +17,11 @@ export default class Navbar extends PureComponent {
           </div>
           <div className="navbar-menu">
             <div className="navbar-start">
+              <div className="navbar-item">
+                <Searchbar username={username} enableRedirect={false} position="right" />
+              </div>
+            </div>
+            <div className="navbar-end">
               <a href="/" className="navbar-item">
                 <span className="is-size-5">Home</span>
               </a>
@@ -28,14 +35,17 @@ export default class Navbar extends PureComponent {
                 <span className="is-size-5">Leaderboards</span>
               </a>
             </div>
-            <div className="navbar-end">
-              <div className="navbar-item">
-                <Searchbar enableRedirect={false} position="right" />
-              </div>
-            </div>
           </div>
         </nav>
       </div>
     );
   }
 }
+
+Navbar.defaultProps = {
+  username: null,
+};
+
+Navbar.propTypes = {
+  username: PropTypes.string,
+};
