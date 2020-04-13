@@ -45,21 +45,22 @@ class Searchbar extends Component {
     axios.post('/search', { user })
       .then((response) => {
         const { data } = response;
+        const { summonerName } = data;
         if (data !== 'Invalid Summoner!') {
           this.setState({
             isLoading: false,
             displaySearchHistory: false,
           });
-          if (!searchHistory.includes(user)) {
-            addSearchHistory(user.toLowerCase());
+          if (!searchHistory.includes(summonerName)) {
+            addSearchHistory(summonerName);
           }
           updateSummonerData(data);
           if (!enableRedirect) {
             console.log(history);
             // eslint-disable-next-line react/prop-types
-            history.push(`/summoner/${user}`);
+            history.push(`/summoner/${summonerName}`);
           } else {
-            this.setState({ redirectURL: `/summoner/${user}` });
+            this.setState({ redirectURL: `/summoner/${summonerName}` });
           }
         } else {
           this.setState({
@@ -111,7 +112,7 @@ class Searchbar extends Component {
     // Does not unfocus on relate elements
     if (e.relatedTarget) {
       const { className } = e.relatedTarget;
-      if (className === 'tag is-delete link-button' || className === 'tag is-link is-capitalized link-button') {
+      if (className === 'tag is-delete link-button' || className === 'tag is-link link-button') {
         return;
       }
     }
@@ -128,8 +129,9 @@ class Searchbar extends Component {
           <div className="tags has-addons">
             <button
               type="button"
-              className="tag is-link is-capitalized link-button"
+              className="tag is-link link-button"
               onClick={() => {
+                console.log('search');
                 this.requestSearchData(user);
               }}
             >
@@ -140,6 +142,7 @@ class Searchbar extends Component {
               type="button"
               className="tag is-delete link-button"
               onClick={() => {
+                console.log('remove');
                 removeSearchHistory(user);
               }}
             />
