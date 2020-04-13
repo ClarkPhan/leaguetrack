@@ -8,7 +8,7 @@ img.resize {
 
 img.medal-resize {
     height: auto;
-    width: 20%;
+    width: 60%;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -49,14 +49,16 @@ img.profilePic-resize {
     text-decoration: none;
 }
 
-.hero {
+#landing-page {
     background-color: #5383e8;
 }
 
+#error-page, #loading-page {
+    background-color: white;
+}
 #summoner-page {
     background-color: white;
     height: 100vh;
-    font-size: 15px;
 }
 
 .has-text-grandmaster {
@@ -77,4 +79,8 @@ img.profilePic-resize {
 
 .has-text-bronze {
     color: brown
+}
+
+.footer {
+    background-color: white;
 }
