@@ -6,7 +6,7 @@ import Footer from '../footer/Footer';
 export default class LandingPage extends PureComponent {
   render() {
     return (
-      <div className="hero is-fullheight">
+      <div id="landing-page" className="hero is-fullheight">
         <div className="container">
           <figure className="image"><img className="resize" src={LandingPageSplash} alt="logo" /></figure>
           <Searchbar />
