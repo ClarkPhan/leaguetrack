@@ -15,11 +15,19 @@ class Searchbar extends Component {
       displaySearchHistory: false,
       error: null,
       redirectURL: null,
+      redirectToErrorPage: false,
     };
   }
 
+  componentDidMount = () => {
+    const { username } = this.props;
+    if (username !== null) {
+      this.requestSearchData(username, true);
+    }
+  }
+
   // The beefy search engine logic
-  requestSearchData = (user) => {
+  requestSearchData = (user, onMount = false) => {
     const {
       searchHistory,
       addSearchHistory,
@@ -45,8 +53,6 @@ class Searchbar extends Component {
           if (!searchHistory.includes(user)) {
             addSearchHistory(user.toLowerCase());
           }
-          // Trigger modal
-          // showModal(true);
           updateSummonerData(data);
           if (!enableRedirect) {
             console.log(history);
@@ -57,9 +63,12 @@ class Searchbar extends Component {
           }
         } else {
           this.setState({
-            error: true,
+            error: (onMount === false),
             isLoading: false,
           });
+          if (onMount) {
+            this.setState({ redirectToErrorPage: true });
+          }
         }
       })
       .catch((error) => {
@@ -152,11 +161,14 @@ class Searchbar extends Component {
       error,
       displaySearchHistory,
       redirectURL,
+      redirectToErrorPage,
     } = this.state;
     const { searchHistory, enableRedirect, position } = this.props;
-    console.log(position);
     if (enableRedirect && redirectURL) {
       return <Redirect to={redirectURL} />;
+    }
+    if (redirectToErrorPage) {
+      return <Redirect to="/error" />;
     }
     return (
       <div>
@@ -194,6 +206,7 @@ class Searchbar extends Component {
                   type="button"
                   className={`${error ? 'has-tooltip-danger has-tooltip-arrow has-tooltip-active' : null}
                               ${error && position === 'right' ? 'has-tooltip-right' : null}
+                              ${error && position === 'bottom' ? 'has-tooltip-bottom' : null}
                               button is-medium`}
                   data-tooltip={error ? 'Invalid Summoner Name!' : null}
                   onClick={this.handleSearch}
@@ -204,7 +217,6 @@ class Searchbar extends Component {
             </div>
           </div>
         </nav>
-        {/* <Modal summonerData={searchResults} isLoading={isLoading} /> */}
       </div>
     );
   }
@@ -213,6 +225,8 @@ class Searchbar extends Component {
 Searchbar.defaultProps = {
   searchHistory: [],
   enableRedirect: true,
+  position: null,
+  username: null,
 };
 
 Searchbar.propTypes = {
@@ -231,6 +245,8 @@ Searchbar.propTypes = {
       key: PropTypes.string,
     }),
   }).isRequired,
+  position: PropTypes.string,
+  username: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({ searchHistory: state.searchbar.searches });
