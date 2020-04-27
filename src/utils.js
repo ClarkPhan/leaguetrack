@@ -1,5 +1,6 @@
 const champions = require('./champion.json');
 const summonerSpells = require('./summoner.json');
+const runes = require('./runesReforged.json');
 
 // Helper function to print data in console
 export const printData = (data) => console.log(JSON.stringify(data, null, 2));
@@ -37,6 +38,27 @@ export const findSummonerSpell = (id) => {
     }
   });
   return spell;
+};
+
+export const findRune = (id, primaryRuneId) => {
+  const data = runes;
+  let runeIcon = null;
+  data.forEach((rune) => {
+    if (rune.id === id) {
+      if (primaryRuneId !== null) {
+        rune.slots.forEach((slot) => {
+          slot.runes.forEach((runeInRow) => {
+            if (runeInRow.id === primaryRuneId) {
+              runeIcon = runeInRow.icon;
+            }
+          });
+        });
+      } else {
+        runeIcon = rune.icon;
+      }
+    }
+  });
+  return runeIcon;
 };
 
 export const findQueue = (id) => {
@@ -100,3 +122,10 @@ export const timeDifference = (previous) => {
 };
 
 export const convertToMinutes = (seconds) => (`${Math.round(seconds / 60)}m  ${seconds % 60}s`);
+
+export const getItemIcon = (PATCH_VERSION, item) => {
+  if (item === 0) {
+    return null;
+  }
+  return `http://ddragon.leagueoflegends.com/cdn/${PATCH_VERSION}/img/item/${item}.png`;
+};
