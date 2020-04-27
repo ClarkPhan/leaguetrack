@@ -78,7 +78,7 @@ img.profilePic-resize {
     margin-bottom: .2rem !important;
 }
 
-.divider {
-    margin-top: 0rem;
-    margin-bottom: 0rem;
+.item {
+    margin: 2px;
+    margin-bottom: 0px;
 }
