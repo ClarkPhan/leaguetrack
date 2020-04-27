@@ -1,13 +1,14 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, useParams, Switch } from 'react-router-dom';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import {
+  BrowserRouter as Router,
+  Route,
+  useParams,
+  Switch,
+} from 'react-router-dom';
 import LandingPage from './components/pages/LandingPage';
 import SummonerPage from './components/pages/SummonerPage';
 import './css/App.css';
 import ErrorPage from './components/pages/ErrorPage';
-
-library.add(faSpinner);
 
 const App = () => (
   <Router>
