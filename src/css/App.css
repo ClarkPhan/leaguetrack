@@ -6,19 +6,8 @@ img.resize {
     margin-right: auto;
 }
 
-img.medal-resize {
-    height: auto;
-    width: 60%;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-
-}
-
 img.profilePic-resize {
-    height: auto;
-    width: 10%;
-
+    width: 10rem;
 }
 
 .fa-search {
@@ -83,4 +72,13 @@ img.profilePic-resize {
 
 .footer {
     background-color: white;
+}
+
+.adjust-margin {
+    margin-bottom: .2rem !important;
+}
+
+.item {
+    margin: 2px;
+    margin-bottom: 0px;
 }
