@@ -31,7 +31,7 @@ const API_KEY = `?api_key=${process.env.API_KEY}`;
 const CHAIN_API_KEY = `&api_key=${process.env.API_KEY}`;
 
 // Riot Data Dragon
-const PATCH_VERSION = '10.7.1';
+const PATCH_VERSION = '10.9.1';
 const DATA_DRAGON = `http://ddragon.leagueoflegends.com/cdn/${PATCH_VERSION}`;
 
 // Use static content generated from build
