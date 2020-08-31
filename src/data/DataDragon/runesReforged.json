@@ -21,7 +21,7 @@
                         "icon": "perk-images/Styles/Domination/Predator/Predator.png",
                         "name": "Predator",
                         "shortDesc": "Add an active effect to your boots that grants a large boost of <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_MS'>MS</lol-uikit-tooltipped-keyword> and causes your next attack or ability to deal bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'>adaptive damage</lol-uikit-tooltipped-keyword>.",
-                        "longDesc": "Enchants your boots with the active effect '<font color='#c60300'>Predator</font>.'<br><br>Channel for 1.5s out of combat to gain 45% movement speed for 15s. Damaging attacks or abilities end this effect, dealing 60 - 180 (+<scaleAD>0.4</scaleAD> bonus AD)(+<scaleAP>0.25</scaleAP> AP) bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'><font color='#48C4B7'>adaptive damage</font></lol-uikit-tooltipped-keyword>.<br><br>Cooldown: 150s - 100s. Starts the game on cooldown. 50% cooldown if interrupted while channeling."
+                        "longDesc": "Enchants your boots with the active effect '<font color='#c60300'>Predator</font>.'<br><br>Gain increased Movement Speed, ramping up to 45% Movement Speed over 1.5 seconds, while chasing enemy champions. After ramping up, damaging attacks or abilities to champions end this effect, dealing 40-120 (+<scaleAD>0.2</scaleAD> bonus AD)(+<scaleAP>0.1</scaleAP> AP) bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'><font color='#48C4B7'>adaptive damage</font></lol-uikit-tooltipped-keyword>.<br><br>Cooldown: 90s-60s."
                     },
                     {
                         "id": 8128,
@@ -157,7 +157,7 @@
                         "icon": "perk-images/Styles/Inspiration/UnsealedSpellbook/UnsealedSpellbook.png",
                         "name": "Unsealed Spellbook",
                         "shortDesc": "Swap Summoner Spells while out of combat. Swapping to unique Summoner Spells will increase the rate at which you can make future swaps.",
-                        "longDesc": "Swap one of your equipped Summoner Spells to a new, single use Summoner Spell. Each unique Summoner Spell you swap to permanently decreases your swap cooldown by 20s (initial swap cooldown is at 4 mins). <br><br>Your first swap becomes available at 6 mins. <br><rules><br>Summoner Spells can only be swapped while out of combat. <br>After using a swapped Summoner Spell you must swap 3 more times before the first can be selected again. </rules>"
+                        "longDesc": "Swap one of your equipped Summoner Spells to a new, single use Summoner Spell. Each unique Summoner Spell you swap to permanently decreases your swap cooldown by 25s (initial swap cooldown is at 5 mins). <br><br>Your first swap becomes available at 6 mins. <br><rules><br>Summoner Spells can only be swapped while out of combat. <br>After using a swapped Summoner Spell you must swap 3 more times before the first can be selected again. </rules>"
                     },
                     {
                         "id": 8358,
@@ -240,8 +240,8 @@
                         "key": "ApproachVelocity",
                         "icon": "perk-images/Styles/Resolve/ApproachVelocity/ApproachVelocity.png",
                         "name": "Approach Velocity",
-                        "shortDesc": "Bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_MS'>MS</lol-uikit-tooltipped-keyword> towards nearby ally champions that are <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_ImpairMov'>movement impaired</lol-uikit-tooltipped-keyword> or enemy champions that you impair.",
-                        "longDesc": "Gain 15% Movement Speed towards nearby ally champions that are movement impaired or enemy champions that you impair. <br><br>Range: 1000"
+                        "shortDesc": "Bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_MS'>MS</lol-uikit-tooltipped-keyword> towards nearby enemy champions that are <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_ImpairMov'>movement impaired</lol-uikit-tooltipped-keyword>, increased for enemy champions that you impair.",
+                        "longDesc": "Gain 7.5% Movement Speed towards nearby enemy champions that are movement impaired. This bonus is increased to 15% Movement Speed for any enemy champion that you impair. <br><br>Activation Range for CC from allies: 1000"
                     },
                     {
                         "id": 8352,
@@ -292,8 +292,8 @@
                         "key": "Conqueror",
                         "icon": "perk-images/Styles/Precision/Conqueror/Conqueror.png",
                         "name": "Conqueror",
-                        "shortDesc": "Gain stacks of adaptive force when attacking enemy champions. After reaching 10 stacks, heal for a portion of damage you deal to champions.",
-                        "longDesc": "Basic attacks or spells that deal damage to an enemy champion grant 2 stacks of Conqueror for 6s, gaining 2-5 <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>Adaptive Force</font></lol-uikit-tooltipped-keyword> per stack. Stacks up to 10 times. Ranged champions gain only 1 stack per basic attack.<br><br>When fully stacked, heal for 15% of the damage you deal to champions (8% for ranged champions)."
+                        "shortDesc": "Gain stacks of adaptive force when attacking enemy champions. After reaching 12 stacks, heal for a portion of damage you deal to champions.",
+                        "longDesc": "Basic attacks or spells that deal damage to an enemy champion grant 2 stacks of Conqueror for 6s, gaining 1.7-4.2 <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>Adaptive Force</font></lol-uikit-tooltipped-keyword> per stack. Stacks up to 12 times. Ranged champions gain only 1 stack per basic attack.<br><br>When fully stacked, heal for 15% of the damage you deal to champions (8% for ranged champions)."
                     }
                 ]
             },
@@ -412,8 +412,8 @@
                         "key": "Guardian",
                         "icon": "perk-images/Styles/Resolve/Guardian/Guardian.png",
                         "name": "Guardian",
-                        "shortDesc": "Guard allies you cast spells on and those that are very nearby. If you or a guarded ally would take damage, you're both hasted and granted a shield.",
-                        "longDesc": "<i>Guard</i> allies within 175 units of you, and allies you target with spells for 2.5s. While <i>Guarding</i>, if you or the ally take damage, both of you gain a shield and are hasted for 1.5s.<br><br>Cooldown: <scaleLevel>70 - 40</scaleLevel> seconds<br>Shield: <scaleLevel>70 - 150</scaleLevel> + <scaleAP>25%</scaleAP> of your ability power + <scalehealth>12%</scalehealth> of your bonus health.<br>Haste: +20% Movement Speed."
+                        "shortDesc": "Guard allies you cast spells on and those that are very nearby. If you or a guarded ally would take damage based on level, you're both granted a shield.",
+                        "longDesc": "<i>Guard</i> allies within 350 units of you, and allies you target with spells for 2.5s. While <i>Guarding</i>, if you or the ally take more than a small amount of damage over the duration of the <i>Guard</i>, both of you gain a shield for 1.5s.<br><br>Cooldown: <scaleLevel>70 - 40</scaleLevel> seconds<br>Shield: <scaleLevel>70 - 150</scaleLevel> + <scaleAP>25%</scaleAP> of your ability power + <scalehealth>12%</scalehealth> of your bonus health<br>Proc Threshold: <scaleLevel>90 - 250</scaleLevel> postmitigation damage"
                     }
                 ]
             },
@@ -496,8 +496,8 @@
                         "key": "Unflinching",
                         "icon": "perk-images/Styles/Sorcery/Unflinching/Unflinching.png",
                         "name": "Unflinching",
-                        "shortDesc": "After casting a Summoner Spell, gain Tenacity and Slow Resistance for a short duration. Additionally, gain Tenacity and Slow Resistance for each Summoner Spell on cooldown. ",
-                        "longDesc": "After casting a Summoner Spell, gain 15% Tenacity and Slow Resistance for 10s. Additionally, gain 10% Tenacity and Slow Resistance for each Summoner Spell on cooldown. "
+                        "shortDesc": "Gain a small amount of tenacity that increases with missing health. ",
+                        "longDesc": "Gain 10% Tenacity and 10% Slow Resist. These values increase by up to an additional 20% Tenacity and 20% Slow Resist based on missing health. Maximum value achieved at 30% health. "
                     }
                 ]
             }
@@ -561,7 +561,7 @@
                         "icon": "perk-images/Styles/Sorcery/NimbusCloak/6361.png",
                         "name": "Nimbus Cloak",
                         "shortDesc": "After casting a Summoner Spell, gain a short movement speed increase that allows you to pass through units.",
-                        "longDesc": "After casting a Summoner Spell, gain a movement speed increase that lasts for 2.5s and allows you to pass through units.<br><br>Increase: 15% - 35% Movement Speed based on the Summoner Spell's cooldown. (Higher cooldown Summoner Spells grant more Movement Speed). "
+                        "longDesc": "After casting a Summoner Spell, gain a movement speed increase that lasts for 2.5s and allows you to pass through units.<br><br>Increase: 10% - 30% Movement Speed based on the Summoner Spell's cooldown. (Higher cooldown Summoner Spells grant more Movement Speed). "
                     }
                 ]
             },

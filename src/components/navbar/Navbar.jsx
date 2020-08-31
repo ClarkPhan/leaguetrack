@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Searchbar from '../searchbar/Searchbar';
+import Searchbar from '../Searchbar/Searchbar';
 
 import LeagueTrackLogo from '../../images/LeagueTrackLogo.png';
 

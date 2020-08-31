@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import LandingPageSplash from '../../images/LandingPageSplash.png';
-import Searchbar from '../searchbar/Searchbar';
+import Searchbar from '../Searchbar/Searchbar';
 import Footer from '../footer/Footer';
 
 export default class LandingPage extends PureComponent {

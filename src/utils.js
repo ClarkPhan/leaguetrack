@@ -1,6 +1,6 @@
-const champions = require('./champion.json');
-const summonerSpells = require('./summoner.json');
-const runes = require('./runesReforged.json');
+const champions = require('./data/DataDragon/champion.json');
+const summonerSpells = require('./data/DataDragon/summoner.json');
+const runes = require('./data/DataDragon/runesReforged.json');
 
 // Helper function to print data in console
 export const printData = (data) => console.log(JSON.stringify(data, null, 2));
