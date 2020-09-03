@@ -1,27 +1,19 @@
 /* eslint-disable no-nested-ternary */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { createProfile } from '../../redux/actions/summonerProfile/actionCreators';
+import { showMoreMatches } from '../../redux/actions/summonerProfile/actionCreators';
 import NoItem from '../../images/NoItem.png';
 
 import Navbar from '../navbar/Navbar';
 import Footer from '../footer/Footer';
 
-class SummonerPage extends Component {
-  constructor() {
-    super();
-    this.state = {
-      limit: 5,
-    };
-  }
-
+class SummonerPage extends PureComponent {
   generateMatchHistory = () => {
-    const { limit } = this.state;
-    const { profile: { matchHistory } } = this.props;
+    const { profile: { matchHistory }, limit } = this.props;
     const { matches } = matchHistory;
     const renderedMatchHistory = [];
     if (matchHistory !== null) {
@@ -151,9 +143,9 @@ class SummonerPage extends Component {
     return null;
   }
 
-  handleShowMore = (e) => {
-    e.preventDefault();
-    this.setState({ limit: 10 });
+  handleShowMore = () => {
+    const { showMore } = this.props;
+    showMore();
   }
 
   createMiniSeries = (miniSeries) => {
@@ -183,8 +175,7 @@ class SummonerPage extends Component {
   };
 
   render() {
-    const { profile, username } = this.props;
-    console.log(profile);
+    const { profile, username, limit } = this.props;
     if (profile === null) {
       return <Redirect to="/" />;
     }
@@ -289,7 +280,14 @@ class SummonerPage extends Component {
             <div className="container is-fluid">
               {this.generateMatchHistory()}
               <div className="has-text-centered">
-                <button className="button" type="button" onClick={this.handleShowMore}> Show More </button>
+                <button
+                  className="button"
+                  type="button"
+                  onClick={this.handleShowMore}
+                  style={limit === 10 ? { display: 'none' } : null}
+                >
+                  Show More
+                </button>
               </div>
             </div>
           </div>
@@ -303,6 +301,7 @@ class SummonerPage extends Component {
 SummonerPage.defaultProps = {
   profile: {},
   username: null,
+  limit: 5,
 };
 
 SummonerPage.propTypes = {
@@ -359,11 +358,15 @@ SummonerPage.propTypes = {
     }),
   }),
   username: PropTypes.string,
+  limit: PropTypes.number,
 };
 
-const mapStateToProps = (state) => ({ profile: state.summonerProfile });
+const mapStateToProps = (state) => ({
+  profile: state.summonerProfile.profile,
+  limit: state.summonerProfile.limit,
+});
 const mapDispatchToProps = (dispatch) => ({
-  updateSummonerData: (data) => dispatch(createProfile(data)),
+  showMore: () => dispatch(showMoreMatches()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SummonerPage);

@@ -1,1 +1,2 @@
 export const CREATE_PROFILE = 'CREATE_PROFILE';
+export const SHOW_MORE_MATCHES = 'SHOW_MORE_MATCHES';
