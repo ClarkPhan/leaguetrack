@@ -70,7 +70,7 @@ app.post('/search', (req, res) => {
     })
     .then((response) => {
       const { data } = response;
-      query = `${MATCH_LIST + encryptedAccountId}?endIndex=5${CHAIN_API_KEY}`;
+      query = `${MATCH_LIST + encryptedAccountId}?endIndex=10${CHAIN_API_KEY}`;
       // Filter for Solo/Duo queue
       data.forEach((queue) => {
         if (queue.queueType === 'RANKED_SOLO_5x5') {
@@ -144,8 +144,7 @@ app.post('/search', (req, res) => {
         });
       });
       returnObj.matchHistory = matchHistory;
-      console.log(returnObj);
-      // console.log(matchHistory);
+      console.log(matchHistory.matches.length);
       res.send(returnObj);
     })
     .catch((error) => {

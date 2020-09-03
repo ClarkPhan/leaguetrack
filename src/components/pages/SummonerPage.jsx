@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -11,13 +11,22 @@ import NoItem from '../../images/NoItem.png';
 import Navbar from '../navbar/Navbar';
 import Footer from '../footer/Footer';
 
-class SummonerPage extends PureComponent {
+class SummonerPage extends Component {
+  constructor() {
+    super();
+    this.state = {
+      limit: 5,
+    };
+  }
+
   generateMatchHistory = () => {
+    const { limit } = this.state;
     const { profile: { matchHistory } } = this.props;
     const { matches } = matchHistory;
     const renderedMatchHistory = [];
     if (matchHistory !== null) {
-      matches.forEach((match) => {
+      for (let i = 0; i < limit; i += 1) {
+        const match = matches[i];
         renderedMatchHistory.push(
           <div key={match.gameId}>
             <div className="columns is-mobile is-gapless">
@@ -136,12 +145,15 @@ class SummonerPage extends PureComponent {
             <hr />
           </div>,
         );
-      });
-      return (
-        renderedMatchHistory
-      );
+      }
+      return (renderedMatchHistory);
     }
     return null;
+  }
+
+  handleShowMore = (e) => {
+    e.preventDefault();
+    this.setState({ limit: 10 });
   }
 
   createMiniSeries = (miniSeries) => {
@@ -276,6 +288,9 @@ class SummonerPage extends PureComponent {
           <div className="level-item">
             <div className="container is-fluid">
               {this.generateMatchHistory()}
+              <div className="has-text-centered">
+                <button className="button" type="button" onClick={this.handleShowMore}> Show More </button>
+              </div>
             </div>
           </div>
         </div>
