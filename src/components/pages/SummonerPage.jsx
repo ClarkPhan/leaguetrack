@@ -206,76 +206,78 @@ class SummonerPage extends PureComponent {
               </span>
             </div>
           </div>
+          <div className="level">
+            <div className="level-item">
+              {profile.isLoading ? <div className="has-text-centered"><FontAwesomeIcon icon="spinner" pulse size="6x" /></div>
+                : (
+                  <div className="has-text-centered">
+                    {profile.tier === undefined
+                      ? (
+                        <div>
+                          <figure className="image is-280x280">
+                            <img className="medal-resize" alt="ranked logo" src="http://opgg-static.akamaized.net/images/medals/default.png" />
+                          </figure>
+                        </div>
+                      )
+                      : (
+                        <div>
+                          <p><strong>{profile.leagueName}</strong></p>
+                          <figure className="image is-280x280">
+                            <img
+                              className="medal-resize"
+                              alt="ranked logo"
+                              src={profile.tierMedal}
+                            />
+                          </figure>
+                          <p className="is-size-6">Ranked Solo/Duo</p>
+                          <p>
+                            <span className={
+                              ` 
+                                ${profile.tier === 'CHALLENGER' ? 'has-text-warning' : null}
+                                ${profile.tier === 'GRANDMASTER' ? 'has-text-grandmaster' : null}
+                                ${profile.tier === 'MASTER' ? 'has-text-master' : null}
+                                ${profile.tier === 'DIAMOND' ? 'has-text-info' : null}
+                                ${profile.tier === 'PLATINUM' ? 'has-text-primary' : null}
+                                ${profile.tier === 'GOLD' ? 'has-text-gold' : null}
+                                ${profile.tier === 'SILVER' ? 'has-text-silver' : null}
+                                ${profile.tier === 'BRONZE' ? 'has-text-bronze' : null}
+                                ${profile.tier === 'IRON' ? 'has-text-grey-light' : null}
+                                is-size-4
+                                has-text-weight-bold
+                              `
+                              }
+                            >
+                              {`${profile.tier}
+                              ${profile.rank}`}
+                            </span>
+                          </p>
+                          <span className="has-text-weight-bold">
+                            {profile.leaguePoints}
+                            {' '}
+                            LP
+                          </span>
+                          {' / '}
+
+                          {profile.wins}
+                          {'W '}
+                          {profile.losses}
+                          {'L '}
+                          <p>
+                            Win Ratio
+                            {' '}
+                            {profile.winRatio}
+                            %
+                          </p>
+                          {profile.miniSeries ? this.createMiniSeries(profile.miniSeries) : null}
+                        </div>
+                      )}
+                  </div>
+                )}
+            </div>
+          </div>
         </section>
 
         <div className="level">
-          <div className="level-item">
-            {profile.isLoading ? <div className="has-text-centered"><FontAwesomeIcon icon="spinner" pulse size="6x" /></div>
-              : (
-                <div className="has-text-centered">
-                  {profile.tier === undefined
-                    ? (
-                      <div>
-                        <figure className="image is-280x280">
-                          <img className="medal-resize" alt="ranked logo" src="http://opgg-static.akamaized.net/images/medals/default.png" />
-                        </figure>
-                      </div>
-                    )
-                    : (
-                      <div>
-                        <p><strong>{profile.leagueName}</strong></p>
-                        <figure className="image is-280x280">
-                          <img
-                            className="medal-resize"
-                            alt="ranked logo"
-                            src={profile.tierMedal}
-                          />
-                        </figure>
-                        <p className="is-size-6">Ranked Solo/Duo</p>
-                        <p>
-                          <span className={
-                            ` 
-                              ${profile.tier === 'CHALLENGER' ? 'has-text-warning' : null}
-                              ${profile.tier === 'GRANDMASTER' ? 'has-text-grandmaster' : null}
-                              ${profile.tier === 'MASTER' ? 'has-text-master' : null}
-                              ${profile.tier === 'DIAMOND' ? 'has-text-info' : null}
-                              ${profile.tier === 'PLATINUM' ? 'has-text-primary' : null}
-                              ${profile.tier === 'GOLD' ? 'has-text-gold' : null}
-                              ${profile.tier === 'SILVER' ? 'has-text-silver' : null}
-                              ${profile.tier === 'BRONZE' ? 'has-text-bronze' : null}
-                              ${profile.tier === 'IRON' ? 'has-text-grey-light' : null}
-                              is-size-4
-                              has-text-weight-bold
-                            `
-                            }
-                          >
-                            {`${profile.tier}
-                            ${profile.rank}`}
-                          </span>
-                        </p>
-                        <span className="has-text-weight-bold">
-                          {profile.leaguePoints}
-                          {' '}
-                          LP
-                        </span>
-                        {' / '}
-
-                        {profile.wins}
-                        {'W '}
-                        {profile.losses}
-                        {'L '}
-                        <p>
-                          Win Ratio
-                          {' '}
-                          {profile.winRatio}
-                          %
-                        </p>
-                        {profile.miniSeries ? this.createMiniSeries(profile.miniSeries) : null}
-                      </div>
-                    )}
-                </div>
-              )}
-          </div>
           <div className="level-item">
             <div className="container is-fluid">
               {this.generateMatchHistory()}
