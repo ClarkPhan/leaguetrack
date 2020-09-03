@@ -78,6 +78,10 @@ img.profilePic-resize {
     margin-bottom: .2rem !important;
 }
 
+.m-0 {
+    margin: 0 !important;
+}
+
 .item {
     margin: 2px;
     margin-bottom: 0px;

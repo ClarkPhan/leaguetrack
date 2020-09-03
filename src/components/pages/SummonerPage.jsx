@@ -188,7 +188,7 @@ class SummonerPage extends PureComponent {
               <img className="profilePic-resize" src={profile.profileIcon} alt="profile icon" />
             </div>
           </div>
-          <div className="level">
+          <div className="level m-0">
             <div className="level-item">
               <span className="is-size-3">
                 {profile.summonerName}
