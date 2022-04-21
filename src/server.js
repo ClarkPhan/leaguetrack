@@ -24,8 +24,8 @@ const port = process.env.PORT || 3001;
 // API
 const API = 'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/';
 const RANK = 'https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/';
-const MATCH_LIST = 'https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/';
-const MATCH = 'https://na1.api.riotgames.com/lol/match/v4/matches/';
+const MATCH_LIST = 'https://na1.api.riotgames.com/lol/match/v5/matchlists/by-account/';
+const MATCH = 'https://na1.api.riotgames.com/lol/match/v5/matches/';
 
 const API_KEY = `?api_key=${process.env.API_KEY}`;
 const CHAIN_API_KEY = `&api_key=${process.env.API_KEY}`;
